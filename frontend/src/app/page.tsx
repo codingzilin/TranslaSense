@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { translateText } from "@/lib/translation";
+import { getToneDescription } from "@/lib/prompts";
 
 const languages = [
   { code: "en", name: "English" },
@@ -173,10 +174,14 @@ export default function Translator() {
               ))}
             </div>
             {selectedTone && (
-              <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>
-                Selected tone:{" "}
-                <span className='font-medium capitalize'>{selectedTone}</span>
-              </p>
+              <div className='mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800'>
+                <p className='text-sm text-blue-700 dark:text-blue-300'>
+                  <span className='font-medium capitalize'>{selectedTone}</span> tone selected
+                </p>
+                <p className='text-xs text-blue-600 dark:text-blue-400 mt-1'>
+                  {getToneDescription(selectedTone)}
+                </p>
+              </div>
             )}
           </div>
 

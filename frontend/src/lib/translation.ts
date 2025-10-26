@@ -1,4 +1,5 @@
 import { API_CONFIG, TRANSLATION_CONFIG } from "./config";
+import { getTonePrompt } from "./prompts";
 
 export interface TranslationRequest {
   text: string;
@@ -44,25 +45,14 @@ export async function translateText({
       languageNames[targetLanguage as keyof typeof languageNames] ||
       targetLanguage;
 
-    // Tone instructions
-    const toneInstructions = {
-      cute: "Use a cute, adorable, and sweet tone with gentle expressions.",
-      formal:
-        "Use a formal, professional, and respectful tone suitable for business or academic contexts.",
-      angry:
-        "Use an angry, frustrated, or aggressive tone that conveys strong negative emotions.",
-      casual:
-        "Use a casual, relaxed, and informal tone as if talking to a friend.",
-    };
+    // Get tone-specific prompt
+    const tonePrompt = tone ? getTonePrompt(tone) : "";
+    
+    const basePrompt = `Translate the following text from ${sourceLangName} to ${targetLangName}.`;
+    const toneInstruction = tonePrompt ? `\n\n${tonePrompt}` : "";
+    const finalInstruction = "Only return the translated text, nothing else:";
 
-    const toneInstruction =
-      tone && toneInstructions[tone as keyof typeof toneInstructions]
-        ? `\n\nTone: ${toneInstructions[tone as keyof typeof toneInstructions]}`
-        : "";
-
-    const prompt = `Translate the following text from ${sourceLangName} to ${targetLangName}.${toneInstruction} Only return the translated text, nothing else:
-
-"${text}"`;
+    const prompt = `${basePrompt}${toneInstruction}\n\n${finalInstruction}\n\n"${text}"`;
 
     const response = await fetch(API_CONFIG.OPENAI_API_URL, {
       method: "POST",
