@@ -4,6 +4,7 @@ export interface TranslationRequest {
   text: string;
   sourceLanguage: string;
   targetLanguage: string;
+  tone?: string;
 }
 
 export interface TranslationResponse {
@@ -16,6 +17,7 @@ export async function translateText({
   text,
   sourceLanguage,
   targetLanguage,
+  tone,
 }: TranslationRequest): Promise<TranslationResponse> {
   try {
     if (!API_CONFIG.OPENAI_API_KEY) {
@@ -42,7 +44,23 @@ export async function translateText({
       languageNames[targetLanguage as keyof typeof languageNames] ||
       targetLanguage;
 
-    const prompt = `Translate the following text from ${sourceLangName} to ${targetLangName}. Only return the translated text, nothing else:
+    // Tone instructions
+    const toneInstructions = {
+      cute: "Use a cute, adorable, and sweet tone with gentle expressions.",
+      formal:
+        "Use a formal, professional, and respectful tone suitable for business or academic contexts.",
+      angry:
+        "Use an angry, frustrated, or aggressive tone that conveys strong negative emotions.",
+      casual:
+        "Use a casual, relaxed, and informal tone as if talking to a friend.",
+    };
+
+    const toneInstruction =
+      tone && toneInstructions[tone as keyof typeof toneInstructions]
+        ? `\n\nTone: ${toneInstructions[tone as keyof typeof toneInstructions]}`
+        : "";
+
+    const prompt = `Translate the following text from ${sourceLangName} to ${targetLangName}.${toneInstruction} Only return the translated text, nothing else:
 
 "${text}"`;
 

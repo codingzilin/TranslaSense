@@ -31,6 +31,7 @@ export default function Translator() {
   const [outputText, setOutputText] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("");
   const [targetLanguage, setTargetLanguage] = useState("");
+  const [selectedTone, setSelectedTone] = useState("");
   const [isTranslating, setIsTranslating] = useState(false);
   const [error, setError] = useState("");
 
@@ -58,6 +59,7 @@ export default function Translator() {
         text: inputText,
         sourceLanguage,
         targetLanguage,
+        tone: selectedTone,
       });
 
       if (result.success) {
@@ -142,6 +144,42 @@ export default function Translator() {
             </div>
           </div>
 
+          {/* Tone Selection */}
+          <div className='mb-6'>
+            <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3'>
+              Translation Tone
+            </label>
+            <div className='flex flex-wrap gap-3'>
+              {[
+                { id: "cute", label: "Cute", emoji: "😊" },
+                { id: "formal", label: "Formal", emoji: "👔" },
+                { id: "angry", label: "Angry", emoji: "😠" },
+                { id: "casual", label: "Casual", emoji: "😎" },
+              ].map((tone) => (
+                <button
+                  key={tone.id}
+                  onClick={() =>
+                    setSelectedTone(selectedTone === tone.id ? "" : tone.id)
+                  }
+                  className={`px-4 py-2 rounded-lg border-2 transition-all duration-200 ${
+                    selectedTone === tone.id
+                      ? "border-blue-500 bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                      : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-500"
+                  }`}
+                >
+                  <span className='mr-2'>{tone.emoji}</span>
+                  {tone.label}
+                </button>
+              ))}
+            </div>
+            {selectedTone && (
+              <p className='mt-2 text-sm text-gray-600 dark:text-gray-400'>
+                Selected tone:{" "}
+                <span className='font-medium capitalize'>{selectedTone}</span>
+              </p>
+            )}
+          </div>
+
           {/* Error Display */}
           {error && (
             <div className='mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg'>
@@ -184,6 +222,8 @@ export default function Translator() {
               onClick={() => {
                 setInputText("");
                 setOutputText("");
+                setSelectedTone("");
+                setError("");
               }}
               className='px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors'
             >
