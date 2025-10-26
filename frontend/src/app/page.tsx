@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { translateText } from "@/lib/translation";
 
 const languages = [
   { code: "en", name: "English" },
@@ -30,11 +31,46 @@ export default function Translator() {
   const [outputText, setOutputText] = useState("");
   const [sourceLanguage, setSourceLanguage] = useState("");
   const [targetLanguage, setTargetLanguage] = useState("");
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleTranslate = () => {
-    // Add actual translation logic here
-    // Currently just a mock translation
-    setOutputText(`Translation result: ${inputText}`);
+  const handleTranslate = async () => {
+    if (!inputText.trim()) {
+      setError("Please enter text to translate");
+      return;
+    }
+
+    if (!sourceLanguage || !targetLanguage) {
+      setError("Please select both source and target languages");
+      return;
+    }
+
+    if (sourceLanguage === targetLanguage) {
+      setError("Source and target languages cannot be the same");
+      return;
+    }
+
+    setIsTranslating(true);
+    setError("");
+
+    try {
+      const result = await translateText({
+        text: inputText,
+        sourceLanguage,
+        targetLanguage,
+      });
+
+      if (result.success) {
+        setOutputText(result.translatedText);
+      } else {
+        setError(result.error || "Translation failed");
+      }
+    } catch (err) {
+      setError("An error occurred during translation");
+      console.error("Translation error:", err);
+    } finally {
+      setIsTranslating(false);
+    }
   };
 
   return (
@@ -77,9 +113,10 @@ export default function Translator() {
             <div className='flex items-center justify-center'>
               <button
                 onClick={handleTranslate}
-                className='px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium'
+                disabled={isTranslating}
+                className='px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed'
               >
-                Translate
+                {isTranslating ? "Translating..." : "Translate"}
               </button>
             </div>
 
@@ -104,6 +141,13 @@ export default function Translator() {
               </Select>
             </div>
           </div>
+
+          {/* Error Display */}
+          {error && (
+            <div className='mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg'>
+              {error}
+            </div>
+          )}
 
           {/* Translation Area */}
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
