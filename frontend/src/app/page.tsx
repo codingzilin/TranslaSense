@@ -149,7 +149,7 @@ export default function Translator() {
         >
           <div className='bg-white/30 backdrop-blur-2xl rounded-3xl p-8 border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]'>
             {/* Language selectors */}
-            <div className='flex items-center justify-between mb-6 gap-4'>
+            <div className='flex items-end justify-between mb-6 gap-4'>
               <LanguageSelector
                 value={sourceLang}
                 onChange={setSourceLang}
@@ -158,7 +158,7 @@ export default function Translator() {
 
               <button
                 onClick={handleSwapLanguages}
-                className='p-3 bg-white/50 backdrop-blur-xl rounded-xl border border-white/30 hover:bg-white/70 hover:scale-105 transition-all shadow-sm'
+                className='h-10 w-10 flex items-center justify-center bg-white/50 backdrop-blur-xl rounded-xl border border-white/30 hover:bg-white/70 hover:scale-105 transition-all shadow-sm mb-0'
                 aria-label='Swap languages'
               >
                 <ArrowLeftRight className='w-5 h-5 text-slate-600' />
