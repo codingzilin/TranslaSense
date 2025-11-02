@@ -194,13 +194,13 @@ export function LanguageSelector({
         {label}
       </label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className='w-full bg-white/50 backdrop-blur-xl border-white/30 rounded-xl text-slate-900'>
+        <SelectTrigger className='w-full bg-white/50 backdrop-blur-xl border-none focus:border-none focus:ring-0 focus:ring-offset-0 rounded-xl text-slate-900'>
           <SelectValue
             placeholder={`Select ${label.toLowerCase()} language`}
             className='text-slate-900'
           />
         </SelectTrigger>
-        <SelectContent className='bg-white/90 backdrop-blur-xl border-white/30 text-slate-900'>
+        <SelectContent className='bg-white/90 backdrop-blur-xl border-none focus:border-none text-slate-900'>
           {languages.map((lang) => (
             <SelectItem
               key={lang.code}
