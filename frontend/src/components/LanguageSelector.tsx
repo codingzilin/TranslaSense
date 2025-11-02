@@ -1,6 +1,12 @@
 "use client";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const languages = [
   { code: "en", name: "English" },
@@ -177,19 +183,30 @@ interface LanguageSelectorProps {
   label: string;
 }
 
-export function LanguageSelector({ value, onChange, label }: LanguageSelectorProps) {
+export function LanguageSelector({
+  value,
+  onChange,
+  label,
+}: LanguageSelectorProps) {
   return (
-    <div className="flex-1">
-      <label className="block text-sm font-medium text-slate-700 mb-2">
+    <div className='flex-1'>
+      <label className='block text-sm font-medium text-slate-700 mb-2'>
         {label}
       </label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-full bg-white/50 backdrop-blur-xl border-white/30 rounded-xl">
-          <SelectValue placeholder={`Select ${label.toLowerCase()} language`} />
+        <SelectTrigger className='w-full bg-white/50 backdrop-blur-xl border-white/30 rounded-xl text-slate-900'>
+          <SelectValue
+            placeholder={`Select ${label.toLowerCase()} language`}
+            className='text-slate-900'
+          />
         </SelectTrigger>
-        <SelectContent className="bg-white/90 backdrop-blur-xl border-white/30">
+        <SelectContent className='bg-white/90 backdrop-blur-xl border-white/30 text-slate-900'>
           {languages.map((lang) => (
-            <SelectItem key={lang.code} value={lang.code}>
+            <SelectItem
+              key={lang.code}
+              value={lang.code}
+              className='text-slate-900 focus:text-slate-900 focus:bg-slate-100'
+            >
               {lang.name}
             </SelectItem>
           ))}
